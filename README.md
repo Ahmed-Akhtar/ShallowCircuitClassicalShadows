@@ -1,6 +1,6 @@
 # ShallowCircuitClassicalShadows
 
-This repository contains several codes to do efficient shallow circuit tomography on a classical computer. 
+This repository contains several codes to do efficient shallow circuit tomography on a classical computer as explained in https://arxiv.org/abs/2209.02093. 
 
 * "CST_MPS_Paper_Plotmaker.ipynb" is an iPython notebook that has some relevant examples for how to make the figures in https://arxiv.org/abs/2209.02093. 
 
