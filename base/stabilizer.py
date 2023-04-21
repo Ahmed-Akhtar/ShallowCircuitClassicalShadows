@@ -204,6 +204,20 @@ def random_brickwall_layer(N,shift):
         ps=numpy.concatenate([ps[2:], ps[:2]])
     return CliffordMap(gs,ps)
 
+def random_krickwall_layer(N,k,shift):
+    '''construct random k-local brickwall Clifford map of N qubits.
+        Each k-qubit clifford rotation is uniformly random.'''
+
+    gates=[random_clifford_map(k) for copy in range(N//k)]
+    gs=scipy.linalg.block_diag(*[gate.gs for gate in gates])
+    ps=numpy.concatenate([gate.ps for gate in gates])
+    if shift%k != 0 :
+        start=2*(shift%k)
+        gs=numpy.concatenate([gs[:,start:], gs[:,:start]],axis=1)
+        gs=numpy.concatenate([gs[start:,:], gs[:start,:]],axis=0)
+        ps=numpy.concatenate([ps[start:], ps[:start]])
+    return CliffordMap(gs,ps)
+
 # ---- state constructors ----
 def stabilizer_state(*stabilizers):
     '''Construct a stabilizer state from a list of stabilizers
@@ -231,6 +245,10 @@ def one_state(N):
 def ghz_state(N):
     objs = [pauli({i:3,i+1:3},N) for i in range(N-1)]
     objs.append(pauli([1]*N))
+    return stabilizer_state(paulis(objs))
+
+def cluster_state(N):
+    objs = [pauli({i:3,(i+1)%N:1,(i+2)%N:3},N) for i in range(N)]
     return stabilizer_state(paulis(objs))
 
 def random_pauli_state(N, r=None):
